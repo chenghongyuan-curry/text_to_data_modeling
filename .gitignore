@@ -1,0 +1,12 @@
+.settings
+.factorypath
+.apt_generated*
+target
+.classpath
+.project
+classes
+.DS_Store
+*.iml
+.idea/libraries/*
+.idea/*
+datax-0.0.1/

@@ -1,0 +1,215 @@
+{
+    "ods_sy_order_db_shipments_item": {
+        "group": "发货单 ",
+        "source": {
+            "type": "mysql",
+            "db": "sy_order_db",
+            "table": "shipments_item",
+            "comment": "发货单明细"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "type": "bigint",
+                "comment": "主键"
+            },
+            {
+                "name": "pur_code",
+                "type": "varchar",
+                "comment": "采购商行编号"
+            },
+            {
+                "name": "sup_code",
+                "type": "varchar",
+                "comment": "供应商行编号"
+            },
+            {
+                "name": "shipments_id",
+                "type": "bigint",
+                "comment": "发货单ID"
+            },
+            {
+                "name": "purchaser_id",
+                "type": "bigint",
+                "comment": "采购商ID"
+            },
+            {
+                "name": "supplier_id",
+                "type": "bigint",
+                "comment": "供应商ID"
+            },
+            {
+                "name": "order_id",
+                "type": "bigint",
+                "comment": "订单ID"
+            },
+            {
+                "name": "order_item_id",
+                "type": "bigint",
+                "comment": "订单行ID"
+            },
+            {
+                "name": "count_type",
+                "type": "smallint",
+                "comment": "数量类型{0:个数,1:金额}"
+            },
+            {
+                "name": "tax_included_amount",
+                "type": "decimal",
+                "comment": "含税金额"
+            },
+            {
+                "name": "tax_excluded_amount",
+                "type": "decimal",
+                "comment": "不含税金额"
+            },
+            {
+                "name": "send_count",
+                "type": "decimal",
+                "comment": "发货数量"
+            },
+            {
+                "name": "add_quantity",
+                "type": "decimal",
+                "comment": "加放量"
+            },
+            {
+                "name": "warranty_period",
+                "type": "smallint",
+                "comment": "质保期（月）"
+            },
+            {
+                "name": "status",
+                "type": "varchar",
+                "comment": "状态{NEW:新建,REJECT:拒收}"
+            },
+            {
+                "name": "receive_status",
+                "type": "smallint",
+                "comment": "收货状态{0:未收货,1:部分收货,2:全部收货}"
+            },
+            {
+                "name": "return_status",
+                "type": "smallint",
+                "comment": "退货状态{0:未退货,1:部分退货,2:全部退货,3:退货中}"
+            },
+            {
+                "name": "next_send_time",
+                "type": "datetime",
+                "comment": "下次发货时间"
+            },
+            {
+                "name": "name",
+                "type": "varchar",
+                "comment": "发货行名称"
+            },
+            {
+                "name": "unit_code",
+                "type": "varchar",
+                "comment": "单位编码"
+            },
+            {
+                "name": "unit_name",
+                "type": "varchar",
+                "comment": "单位名称"
+            },
+            {
+                "name": "tax_included_price",
+                "type": "decimal",
+                "comment": "含税单价"
+            },
+            {
+                "name": "tax_excluded_price",
+                "type": "decimal",
+                "comment": "未税单价"
+            },
+            {
+                "name": "tax_rate",
+                "type": "varchar",
+                "comment": "税率"
+            },
+            {
+                "name": "tax_code",
+                "type": "varchar",
+                "comment": "税码"
+            },
+            {
+                "name": "remark",
+                "type": "varchar",
+                "comment": "备注"
+            },
+            {
+                "name": "number",
+                "type": "decimal",
+                "comment": "数量"
+            },
+            {
+                "name": "creator",
+                "type": "bigint",
+                "comment": "创建人ID"
+            },
+            {
+                "name": "create_time",
+                "type": "datetime",
+                "comment": "创建时间"
+            },
+            {
+                "name": "modifier",
+                "type": "bigint",
+                "comment": "修改人"
+            },
+            {
+                "name": "modify_time",
+                "type": "datetime",
+                "comment": "修改时间"
+            },
+            {
+                "name": "is_deleted",
+                "type": "tinyint",
+                "comment": "逻辑删除标识"
+            },
+            {
+                "name": "buyer_id",
+                "type": "bigint",
+                "comment": "购买人ID"
+            },
+            {
+                "name": "item_code",
+                "type": "varchar",
+                "comment": "(已废弃)"
+            },
+            {
+                "name": "settlement_status",
+                "type": "tinyint",
+                "comment": "入账状态 0 未进入1部分进入 2 全部入账"
+            },
+            {
+                "name": "version",
+                "type": "int",
+                "comment": "版本号"
+            },
+            {
+                "name": "invoice_receiver_id",
+                "type": "bigint",
+                "comment": "收票人ID"
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_shipments_item_detail",
+                "condition": "shipments_item_id",
+                "cardinality": "1 : 1"
+            },
+            {
+                "target": "ods_fulfillment_db_shipments",
+                "condition": "id",
+                "cardinality": "1 : n"
+            },
+            {
+                "target": "ods_fulfillment_db_order_item",
+                "condition": "id",
+                "cardinality": "1 : n"
+            }
+        ]
+    }
+}

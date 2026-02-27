@@ -1,0 +1,1 @@
+# import os# os.environ["GEMINI_API_KEY"] = 'AIzaSyDDRRw2rxrGx49DXUHNbhHTY8kgLJco7-Q'# key = os.environ.get("GEMINI_API_KEY")# if key:#     print(f"✅ 环境变量已找到！Key 的前几位是: {key[:8]}...")# else:#     print("❌ 环境变量未找到，请检查设置。")import sysprint(sys.path)from google import genaiprint(genai.__version__)

@@ -1,0 +1,300 @@
+{
+    "ods_sy_order_db_order_item_info": {
+        "group": "订单 业务单元",
+        "source": {
+            "type": "mysql",
+            "db": "sy_order_db",
+            "table": "order_item_info",
+            "comment": "订单行信息"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "type": "bigint",
+                "comment": "ID"
+            },
+            {
+                "name": "purchaser_id",
+                "type": "bigint",
+                "comment": "采购商ID"
+            },
+            {
+                "name": "order_id",
+                "type": "bigint",
+                "comment": "订单ID"
+            },
+            {
+                "name": "order_item_id",
+                "type": "bigint",
+                "comment": "订单行ID"
+            },
+            {
+                "name": "contract_item_code",
+                "type": "varchar",
+                "comment": "合同行编号"
+            },
+            {
+                "name": "contract_item_pur_code",
+                "type": "varchar",
+                "comment": "采购商合同行编号"
+            },
+            {
+                "name": "settle_group_code",
+                "type": "varchar",
+                "comment": "成本中心编码"
+            },
+            {
+                "name": "settle_group_name",
+                "type": "varchar",
+                "comment": "成本中心名称"
+            },
+            {
+                "name": "materiel_attr_name",
+                "type": "varchar",
+                "comment": "物资属性名称"
+            },
+            {
+                "name": "creator",
+                "type": "bigint",
+                "comment": "创建人ID"
+            },
+            {
+                "name": "create_time",
+                "type": "datetime",
+                "comment": "创建时间"
+            },
+            {
+                "name": "modifier",
+                "type": "bigint",
+                "comment": "修改人ID"
+            },
+            {
+                "name": "modify_time",
+                "type": "datetime",
+                "comment": "修改时间"
+            },
+            {
+                "name": "is_deleted",
+                "type": "tinyint",
+                "comment": "逻辑删除标识"
+            },
+            {
+                "name": "purchase_group_pur_code",
+                "type": "varchar",
+                "comment": "外部组织code"
+            },
+            {
+                "name": "purchase_group_name",
+                "type": "varchar",
+                "comment": "外部组织name"
+            },
+            {
+                "name": "budget_name",
+                "type": "varchar",
+                "comment": "预算名称"
+            },
+            {
+                "name": "budget_detail_name",
+                "type": "varchar",
+                "comment": "预算明细名称"
+            },
+            {
+                "name": "budget_subject_level_code",
+                "type": "varchar",
+                "comment": "预算科目三级编码"
+            },
+            {
+                "name": "expense_type_name",
+                "type": "varchar",
+                "comment": "费用类型名称"
+            },
+            {
+                "name": "beneficiary_name",
+                "type": "varchar",
+                "comment": "受益对象名称"
+            },
+            {
+                "name": "user_code",
+                "type": "varchar",
+                "comment": "使用人编号"
+            },
+            {
+                "name": "user_name",
+                "type": "varchar",
+                "comment": "使用人名称"
+            },
+            {
+                "name": "user_mobile",
+                "type": "varchar",
+                "comment": "使用人电话"
+            },
+            {
+                "name": "user_org_pur_code",
+                "type": "varchar",
+                "comment": "使用人部门外部编码"
+            },
+            {
+                "name": "user_org_name",
+                "type": "varchar",
+                "comment": "使用人部门名称"
+            },
+            {
+                "name": "buyer_code",
+                "type": "varchar",
+                "comment": "购买人编号"
+            },
+            {
+                "name": "buyer_name",
+                "type": "varchar",
+                "comment": "购买人名称"
+            },
+            {
+                "name": "buyer_org_name",
+                "type": "varchar",
+                "comment": "购买人部门名称"
+            },
+            {
+                "name": "budget_type_name",
+                "type": "varchar",
+                "comment": "预算类型名称"
+            },
+            {
+                "name": "business_unit_pur_code",
+                "type": "varchar",
+                "comment": "业务单元编码"
+            },
+            {
+                "name": "business_unit_name",
+                "type": "varchar",
+                "comment": "业务单元名称"
+            },
+            {
+                "name": "stock_organization_name",
+                "type": "varchar",
+                "comment": "库存组织名称"
+            },
+            {
+                "name": "expense_type_level_code",
+                "type": "varchar",
+                "comment": "费用类型层级编码"
+            },
+            {
+                "name": "stock_site_name",
+                "type": "varchar",
+                "comment": "库存地点名称"
+            },
+            {
+                "name": "receiver_code",
+                "type": "varchar",
+                "comment": "收货人编码"
+            },
+            {
+                "name": "receiver_name",
+                "type": "varchar",
+                "comment": "收货人名称"
+            },
+            {
+                "name": "receiver_mobile",
+                "type": "varchar",
+                "comment": "收货人电话"
+            },
+            {
+                "name": "invoice_receiver_code",
+                "type": "varchar",
+                "comment": "收票人编码"
+            },
+            {
+                "name": "invoice_receiver_name",
+                "type": "varchar",
+                "comment": "收票人名称"
+            },
+            {
+                "name": "invoice_receiver_mobile",
+                "type": "varchar",
+                "comment": "收票人电话"
+            },
+            {
+                "name": "invoice_receiver_purchase_group_name",
+                "type": "varchar",
+                "comment": "收票人采购组编码"
+            },
+            {
+                "name": "accounting_subject_code",
+                "type": "varchar",
+                "comment": "核算科目编号"
+            },
+            {
+                "name": "accounting_subject_name",
+                "type": "varchar",
+                "comment": "核算科目名称"
+            },
+            {
+                "name": "accounting_subject_pur_code",
+                "type": "varchar",
+                "comment": "核算科目外部编号"
+            },
+            {
+                "name": "contract_code",
+                "type": "varchar",
+                "comment": "合同编号"
+            },
+            {
+                "name": "budget_info",
+                "type": "varchar",
+                "comment": "预算信息"
+            },
+            {
+                "name": "item_type_code",
+                "type": "varchar",
+                "comment": "行类型编码"
+            },
+            {
+                "name": "item_base_type_code",
+                "type": "varchar",
+                "comment": "行类型基准"
+            },
+            {
+                "name": "item_type_name",
+                "type": "varchar",
+                "comment": "行类型名称"
+            },
+            {
+                "name": "project_info",
+                "type": "varchar",
+                "comment": "项目信息"
+            },
+            {
+                "name": "buyer_invoice_receiver_code",
+                "type": "varchar",
+                "comment": "需求收票人编码"
+            },
+            {
+                "name": "buyer_invoice_receiver_name",
+                "type": "varchar",
+                "comment": "需求收票人名称"
+            },
+            {
+                "name": "buyer_invoice_receiver_mobile",
+                "type": "varchar",
+                "comment": "需求收票人电话"
+            },
+            {
+                "name": "contract_item_info",
+                "type": "varchar",
+                "comment": "合同行"
+            },
+            {
+                "name": "price_category_id",
+                "type": "bigint",
+                "comment": "价格库id"
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_order_item",
+                "condition": "id",
+                "cardinality": "1 : 1"
+            }
+        ]
+    }
+}

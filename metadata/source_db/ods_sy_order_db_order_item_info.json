@@ -1,0 +1,411 @@
+{
+    "ods_sy_order_db_order_item_info": {
+        "layer": "ODS",
+        "source_db": "sy_order_db",
+        "source_table": "order_item_info",
+        "logic_summary": "订单行信息",
+        "description": "订单行信息",
+        "group": "订单业务单元-po",
+        "columns": [
+            {
+                "name": "id",
+                "type": "BIGINT",
+                "comment": "ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchaser_id",
+                "type": "BIGINT",
+                "comment": "采购商ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "order_id",
+                "type": "BIGINT",
+                "comment": "订单ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "order_item_id",
+                "type": "BIGINT",
+                "comment": "订单行ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "contract_item_code",
+                "type": "VARCHAR",
+                "comment": "合同行编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "contract_item_pur_code",
+                "type": "VARCHAR",
+                "comment": "采购商合同行编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "settle_group_code",
+                "type": "VARCHAR",
+                "comment": "成本中心编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "settle_group_name",
+                "type": "VARCHAR",
+                "comment": "成本中心名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "materiel_attr_name",
+                "type": "VARCHAR",
+                "comment": "物资属性名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "creator",
+                "type": "BIGINT",
+                "comment": "创建人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "create_time",
+                "type": "DATETIME",
+                "comment": "创建时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modifier",
+                "type": "BIGINT",
+                "comment": "修改人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modify_time",
+                "type": "DATETIME",
+                "comment": "修改时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "is_deleted",
+                "type": "TINYINT",
+                "comment": "逻辑删除标识",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchase_group_pur_code",
+                "type": "VARCHAR",
+                "comment": "外部组织code",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchase_group_name",
+                "type": "VARCHAR",
+                "comment": "外部组织name",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "budget_name",
+                "type": "VARCHAR",
+                "comment": "预算名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "budget_detail_name",
+                "type": "VARCHAR",
+                "comment": "预算明细名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "budget_subject_level_code",
+                "type": "VARCHAR",
+                "comment": "预算科目三级编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "expense_type_name",
+                "type": "VARCHAR",
+                "comment": "费用类型名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "beneficiary_name",
+                "type": "VARCHAR",
+                "comment": "受益对象名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "user_code",
+                "type": "VARCHAR",
+                "comment": "使用人编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "user_name",
+                "type": "VARCHAR",
+                "comment": "使用人名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "user_mobile",
+                "type": "VARCHAR",
+                "comment": "使用人电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "user_org_pur_code",
+                "type": "VARCHAR",
+                "comment": "使用人部门外部编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "user_org_name",
+                "type": "VARCHAR",
+                "comment": "使用人部门名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "buyer_code",
+                "type": "VARCHAR",
+                "comment": "购买人编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "buyer_name",
+                "type": "VARCHAR",
+                "comment": "购买人名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "buyer_org_name",
+                "type": "VARCHAR",
+                "comment": "购买人部门名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "budget_type_name",
+                "type": "VARCHAR",
+                "comment": "预算类型名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "business_unit_pur_code",
+                "type": "VARCHAR",
+                "comment": "业务单元编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "business_unit_name",
+                "type": "VARCHAR",
+                "comment": "业务单元名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "stock_organization_name",
+                "type": "VARCHAR",
+                "comment": "库存组织名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "expense_type_level_code",
+                "type": "VARCHAR",
+                "comment": "费用类型层级编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "stock_site_name",
+                "type": "VARCHAR",
+                "comment": "库存地点名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receiver_code",
+                "type": "VARCHAR",
+                "comment": "收货人编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receiver_name",
+                "type": "VARCHAR",
+                "comment": "收货人名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receiver_mobile",
+                "type": "VARCHAR",
+                "comment": "收货人电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_code",
+                "type": "VARCHAR",
+                "comment": "收票人编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_name",
+                "type": "VARCHAR",
+                "comment": "收票人名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_mobile",
+                "type": "VARCHAR",
+                "comment": "收票人电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_purchase_group_name",
+                "type": "VARCHAR",
+                "comment": "收票人采购组编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "accounting_subject_code",
+                "type": "VARCHAR",
+                "comment": "核算科目编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "accounting_subject_name",
+                "type": "VARCHAR",
+                "comment": "核算科目名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "accounting_subject_pur_code",
+                "type": "VARCHAR",
+                "comment": "核算科目外部编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "contract_code",
+                "type": "VARCHAR",
+                "comment": "合同编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "budget_info",
+                "type": "VARCHAR",
+                "comment": "预算信息",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "item_type_code",
+                "type": "VARCHAR",
+                "comment": "行类型编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "item_base_type_code",
+                "type": "VARCHAR",
+                "comment": "行类型基准",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "item_type_name",
+                "type": "VARCHAR",
+                "comment": "行类型名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "project_info",
+                "type": "VARCHAR",
+                "comment": "项目信息",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "buyer_invoice_receiver_code",
+                "type": "VARCHAR",
+                "comment": "需求收票人编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "buyer_invoice_receiver_name",
+                "type": "VARCHAR",
+                "comment": "需求收票人名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "buyer_invoice_receiver_mobile",
+                "type": "VARCHAR",
+                "comment": "需求收票人电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "contract_item_info",
+                "type": "VARCHAR",
+                "comment": "合同行",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "price_category_id",
+                "type": "BIGINT",
+                "comment": "价格库id",
+                "nullable": false,
+                "primary_key": false
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_order_item",
+                "on": "ods_fulfillment_db_order_item_info.order_item_id = ods_fulfillment_db_order_item.id",
+                "cardinality": "1:1"
+            }
+        ]
+    }
+}

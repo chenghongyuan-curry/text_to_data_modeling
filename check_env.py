@@ -1,0 +1,1 @@
+# 在 check_env.py 中添加强制覆盖from dotenv import load_dotenvimport osprint("加载前:", os.environ.get("DASHSCOPE_API_KEY"))# 强制重新加载 .env 文件中的值load_dotenv(override=True)  # 添加 override 参数print("加载后:", os.environ.get("DASHSCOPE_API_KEY"))

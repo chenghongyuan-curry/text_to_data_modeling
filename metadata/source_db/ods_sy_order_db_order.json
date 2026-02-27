@@ -1,0 +1,549 @@
+{
+    "ods_sy_order_db_order": {
+        "layer": "ODS",
+        "source_db": "sy_order_db",
+        "source_table": "order",
+        "logic_summary": "订单",
+        "description": "订单",
+        "group": "订单业务单元-po",
+        "columns": [
+            {
+                "name": "id",
+                "type": "BIGINT",
+                "comment": "ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "code",
+                "type": "VARCHAR",
+                "comment": "订单号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchaser_order_code",
+                "type": "VARCHAR",
+                "comment": "采购商订单编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_order_code",
+                "type": "VARCHAR",
+                "comment": "供应商订单编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "erp_code",
+                "type": "VARCHAR",
+                "comment": "erp 订单号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchaser_id",
+                "type": "BIGINT",
+                "comment": "采购商ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_id",
+                "type": "BIGINT",
+                "comment": "供应商ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_main_user_id",
+                "type": "BIGINT",
+                "comment": "供应商主联系人",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "system_type",
+                "type": "SMALLINT",
+                "comment": "系统类型",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "source_scene",
+                "type": "SMALLINT",
+                "comment": "来源场景",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchaser_company_id",
+                "type": "BIGINT",
+                "comment": "采购商公司id(法人主体)",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_id",
+                "type": "BIGINT",
+                "comment": "采购员id",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_org_id",
+                "type": "BIGINT",
+                "comment": "采购员的部门ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchase_unit_id",
+                "type": "BIGINT",
+                "comment": "采购单位ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receive_address_id",
+                "type": "BIGINT",
+                "comment": "收货地址ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receive_user_id",
+                "type": "BIGINT",
+                "comment": "收货人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_title_id",
+                "type": "BIGINT",
+                "comment": "发票头信息ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_address_id",
+                "type": "BIGINT",
+                "comment": "收票地址ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_id",
+                "type": "BIGINT",
+                "comment": "收票人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_type",
+                "type": "SMALLINT",
+                "comment": "发票类型{0:普通发票,1:增值发票}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "freight_materiel_id",
+                "type": "BIGINT",
+                "comment": "运费物料ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "freight_order_item_code",
+                "type": "VARCHAR",
+                "comment": "运费订单行编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "freight_order_item_id",
+                "type": "BIGINT",
+                "comment": "运费对应订单行ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "freight_price",
+                "type": "DECIMAL",
+                "comment": "运费价格",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "freight_tax_rate",
+                "type": "DECIMAL",
+                "comment": "运费税率",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_included_amount",
+                "type": "DECIMAL",
+                "comment": "含税总价",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_excluded_amount",
+                "type": "DECIMAL",
+                "comment": "未税总价",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "amount",
+                "type": "DECIMAL",
+                "comment": "总金额",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "currency",
+                "type": "VARCHAR",
+                "comment": "原币币种",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "base_exchange_rate",
+                "type": "DECIMAL",
+                "comment": "本位币汇率",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "base_currency",
+                "type": "VARCHAR",
+                "comment": "本位币币种",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "delivery_area_code",
+                "type": "VARCHAR",
+                "comment": "配送区域",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "status",
+                "type": "VARCHAR",
+                "comment": "订单状态{DRAFT草稿,NEW新建,CONFIRMED已确认,PROCESSED已处理,DONE已完成,CANCEL已取消,REJECTED:已拒绝}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "send_status",
+                "type": "SMALLINT",
+                "comment": "发货状态{0:未发货,1:部分发货,2:全部发货}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receive_status",
+                "type": "SMALLINT",
+                "comment": "收货状态{0:待收货,1:部分收货,2:全部收货,3全部取消}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "audit_status",
+                "type": "SMALLINT",
+                "comment": "审批状态{0:未审批,1:待审批,2:审批中,3:审批通过,4:审批驳回}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "sup_status",
+                "type": "SMALLINT",
+                "comment": "供应商订单状态{0:未创建,1:创建中,2:创建成功,3:创建失败}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "sub_status",
+                "type": "SMALLINT",
+                "comment": "1创建: 101 创建中, 102 创建成功, 103 创建失败, 2提交: 201 提交中, 202 提交成功, 203 提交失败",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "advance_status",
+                "type": "SMALLINT",
+                "comment": "预付状态 0:无预付 1:待预付 2:部分预付 3:全部预付",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "advance_amount",
+                "type": "DECIMAL",
+                "comment": "预付金额",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "remark",
+                "type": "VARCHAR",
+                "comment": "备注",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "accessory",
+                "type": "VARCHAR",
+                "comment": "附件",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "reject_reason",
+                "type": "VARCHAR",
+                "comment": "拒绝原因",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "creator",
+                "type": "BIGINT",
+                "comment": "创建人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "create_time",
+                "type": "DATETIME",
+                "comment": "创建时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modifier",
+                "type": "BIGINT",
+                "comment": "修改人",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modify_time",
+                "type": "DATETIME",
+                "comment": "修改时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "is_deleted",
+                "type": "TINYINT",
+                "comment": "逻辑删除标识{0:未删除,1:已删除}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "contract_id",
+                "type": "BIGINT",
+                "comment": "合同id",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "pay_type",
+                "type": "VARCHAR",
+                "comment": "付款类型",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "pay_status",
+                "type": "VARCHAR",
+                "comment": "支付状态",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "trade_type",
+                "type": "SMALLINT",
+                "comment": "交易类型",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "logistics_status",
+                "type": "VARCHAR",
+                "comment": "物流状态{UNSHIPPED:待发货，UNRECEIVED:待收货,COMPLETE:已完成，CANCEL:已取消,REJECTED:已拒绝}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "type",
+                "type": "VARCHAR",
+                "comment": "订单类型{调旧商品\"OLDPRODUCT\"}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "version",
+                "type": "INT",
+                "comment": "版本",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "version_time",
+                "type": "DATETIME",
+                "comment": "版本时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchase_organization_code",
+                "type": "VARCHAR",
+                "comment": "采购组织编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "contract_code",
+                "type": "VARCHAR",
+                "comment": "合同编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "contract_exempt",
+                "type": "SMALLINT",
+                "comment": "合同豁免",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "account_period_type",
+                "type": "SMALLINT",
+                "comment": "账期类型",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "account_period",
+                "type": "INT",
+                "comment": "账期",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "payment_term_info",
+                "type": "VARCHAR",
+                "comment": "付款条款",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "extend_content",
+                "type": "VARCHAR",
+                "comment": "扩展内容json格式",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_org_code",
+                "type": "VARCHAR",
+                "comment": "采购人所在组织编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_group_code",
+                "type": "VARCHAR",
+                "comment": "采购人所在组编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_channel_id",
+                "type": "BIGINT",
+                "comment": "供货渠道id",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "submit_time",
+                "type": "DATETIME",
+                "comment": "订单提交时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "mark",
+                "type": "VARCHAR",
+                "comment": "标记",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "type_name",
+                "type": "VARCHAR",
+                "comment": "订单类型名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "type_bak",
+                "type": "VARCHAR",
+                "comment": "",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "new_invoice_type",
+                "type": "VARCHAR",
+                "comment": "",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "enable_payment_stage",
+                "type": "TINYINT",
+                "comment": "是否开启付款阶段 0不开启，1开启",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "update_scene",
+                "type": "SMALLINT",
+                "comment": "订单变更来源 1：来源于订单 2：来源于合同",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "display",
+                "type": "TINYINT",
+                "comment": "是否显示单次订单：1显示，0不显示",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "freight",
+                "type": "TINYINT",
+                "comment": "是否开启运费：1开启，0不开启",
+                "nullable": false,
+                "primary_key": false
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_order_info",
+                "on": "ods_fulfillment_db_order.id = ods_fulfillment_db_order_info.order_id",
+                "cardinality": "1:1"
+            },
+            {
+                "target": "ods_fulfillment_db_order_item",
+                "on": "ods_fulfillment_db_order.id = ods_fulfillment_db_order_item.order_id",
+                "cardinality": "1:n"
+            }
+        ]
+    }
+}

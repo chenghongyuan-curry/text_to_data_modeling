@@ -1,0 +1,570 @@
+{
+    "ods_sy_order_db_order_item": {
+        "group": "订单 业务单元",
+        "source": {
+            "type": "mysql",
+            "db": "sy_order_db",
+            "table": "order_item",
+            "comment": "订单明细"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "type": "bigint",
+                "comment": "ID"
+            },
+            {
+                "name": "serial_code",
+                "type": "int",
+                "comment": "序号"
+            },
+            {
+                "name": "order_id",
+                "type": "bigint",
+                "comment": "订单ID"
+            },
+            {
+                "name": "type",
+                "type": "smallint",
+                "comment": "类型{0:商品,1:物料}"
+            },
+            {
+                "name": "source_item_key",
+                "type": "varchar",
+                "comment": "来源key"
+            },
+            {
+                "name": "source_type",
+                "type": "smallint",
+                "comment": "来源类型"
+            },
+            {
+                "name": "source_id",
+                "type": "bigint",
+                "comment": "来源ID"
+            },
+            {
+                "name": "source_code",
+                "type": "varchar",
+                "comment": "来源单号"
+            },
+            {
+                "name": "source_item_id",
+                "type": "bigint",
+                "comment": "来源行ID"
+            },
+            {
+                "name": "apply_code",
+                "type": "varchar",
+                "comment": "请购单号"
+            },
+            {
+                "name": "apply_item_code",
+                "type": "varchar",
+                "comment": "请购行号"
+            },
+            {
+                "name": "source_item_code",
+                "type": "varchar",
+                "comment": "来源行code"
+            },
+            {
+                "name": "purchaser_item_code",
+                "type": "varchar",
+                "comment": "采购商订单行编号"
+            },
+            {
+                "name": "supplier_item_code",
+                "type": "varchar",
+                "comment": "供应商订单行编号"
+            },
+            {
+                "name": "purchaser_id",
+                "type": "bigint",
+                "comment": "采购商ID"
+            },
+            {
+                "name": "supplier_id",
+                "type": "bigint",
+                "comment": "供应商ID"
+            },
+            {
+                "name": "purchaser_company_id",
+                "type": "bigint",
+                "comment": "采购商公司id(法人主体)"
+            },
+            {
+                "name": "settle_group_id",
+                "type": "bigint",
+                "comment": "结算组（中心）ID"
+            },
+            {
+                "name": "materiel_attr_code",
+                "type": "varchar",
+                "comment": "物资属性编码"
+            },
+            {
+                "name": "contract_item_id",
+                "type": "bigint",
+                "comment": "合同行ID"
+            },
+            {
+                "name": "address_id",
+                "type": "bigint",
+                "comment": "收货地址ID"
+            },
+            {
+                "name": "buyer_id",
+                "type": "bigint",
+                "comment": "购买人ID"
+            },
+            {
+                "name": "buyer_org_code",
+                "type": "varchar",
+                "comment": "购买人部门编号"
+            },
+            {
+                "name": "item_id",
+                "type": "bigint",
+                "comment": "商品ID"
+            },
+            {
+                "name": "item_code",
+                "type": "varchar",
+                "comment": "物料编号"
+            },
+            {
+                "name": "product_id",
+                "type": "bigint",
+                "comment": "商品ID"
+            },
+            {
+                "name": "instance_code",
+                "type": "varchar",
+                "comment": "易卡markId"
+            },
+            {
+                "name": "currency",
+                "type": "varchar",
+                "comment": "币种"
+            },
+            {
+                "name": "count",
+                "type": "decimal",
+                "comment": "数量"
+            },
+            {
+                "name": "cancel_count",
+                "type": "decimal",
+                "comment": "取消量"
+            },
+            {
+                "name": "cancel_remark",
+                "type": "varchar",
+                "comment": "取消原因"
+            },
+            {
+                "name": "number",
+                "type": "decimal",
+                "comment": "数量"
+            },
+            {
+                "name": "count_type",
+                "type": "smallint",
+                "comment": "数量类型{0:个数,1:金额}"
+            },
+            {
+                "name": "tolerance",
+                "type": "decimal",
+                "comment": "允差"
+            },
+            {
+                "name": "receive_control_type",
+                "type": "tinyint",
+                "comment": "超量接收控制类型 1--禁止提交 2--提醒 3--不提醒"
+            },
+            {
+                "name": "add_quantity",
+                "type": "decimal",
+                "comment": "加放量"
+            },
+            {
+                "name": "tax_included_price",
+                "type": "decimal",
+                "comment": "含税价格"
+            },
+            {
+                "name": "tax_excluded_price",
+                "type": "decimal",
+                "comment": "不含税价格"
+            },
+            {
+                "name": "tax_included_amount",
+                "type": "decimal",
+                "comment": "含税金额"
+            },
+            {
+                "name": "tax_excluded_amount",
+                "type": "decimal",
+                "comment": "不含税金额"
+            },
+            {
+                "name": "tax_included_market_price",
+                "type": "decimal",
+                "comment": "含税市场价"
+            },
+            {
+                "name": "tax_excluded_market_price",
+                "type": "decimal",
+                "comment": "不含税市场价"
+            },
+            {
+                "name": "apply_item_amount",
+                "type": "decimal",
+                "comment": "申请行金额"
+            },
+            {
+                "name": "apply_item_number",
+                "type": "decimal",
+                "comment": "申请行数量"
+            },
+            {
+                "name": "apply_item_tax_rate",
+                "type": "decimal",
+                "comment": "申请行税率"
+            },
+            {
+                "name": "tax_point",
+                "type": "decimal",
+                "comment": "税率"
+            },
+            {
+                "name": "tax_code",
+                "type": "varchar",
+                "comment": "税码"
+            },
+            {
+                "name": "estimated_arrive_time",
+                "type": "datetime",
+                "comment": "预计到货时间"
+            },
+            {
+                "name": "final_arrive_time",
+                "type": "datetime",
+                "comment": "截止到货时间"
+            },
+            {
+                "name": "arrive_period",
+                "type": "int",
+                "comment": "到货周期（天数）"
+            },
+            {
+                "name": "status",
+                "type": "varchar",
+                "comment": "状态{DRAFT草稿,NEW新建,CONFIRMED已确认,REJECTED:已拒绝,PROCESSED已处理,DONE已完成,CANCEL已取消}"
+            },
+            {
+                "name": "send_status",
+                "type": "smallint",
+                "comment": "发货状态{0:待发货,1:部分发货,2:全部发货}"
+            },
+            {
+                "name": "receive_status",
+                "type": "smallint",
+                "comment": "收货状态{0:待收货,1:部分收货,2:全部收货}"
+            },
+            {
+                "name": "freeze_status",
+                "type": "smallint",
+                "comment": "冻结状态{0:未冻结,1:部分冻结,2:全部冻结}"
+            },
+            {
+                "name": "remark",
+                "type": "varchar",
+                "comment": "易卡明细"
+            },
+            {
+                "name": "remark2",
+                "type": "varchar",
+                "comment": "备注"
+            },
+            {
+                "name": "inner_remark",
+                "type": "varchar",
+                "comment": "内部备注"
+            },
+            {
+                "name": "extend_content",
+                "type": "varchar",
+                "comment": "拓展"
+            },
+            {
+                "name": "creator",
+                "type": "bigint",
+                "comment": "创建人ID"
+            },
+            {
+                "name": "create_time",
+                "type": "datetime",
+                "comment": "创建时间"
+            },
+            {
+                "name": "modifier",
+                "type": "bigint",
+                "comment": "修改人"
+            },
+            {
+                "name": "modify_time",
+                "type": "datetime",
+                "comment": "修改时间"
+            },
+            {
+                "name": "is_deleted",
+                "type": "tinyint",
+                "comment": "逻辑删除状态{0:未删除,1:已删除}"
+            },
+            {
+                "name": "code",
+                "type": "varchar",
+                "comment": "订单行编号"
+            },
+            {
+                "name": "erp_code",
+                "type": "varchar",
+                "comment": "erp订单行号"
+            },
+            {
+                "name": "receive_user_id",
+                "type": "bigint",
+                "comment": "收货人ID"
+            },
+            {
+                "name": "budget_code",
+                "type": "varchar",
+                "comment": "预算code"
+            },
+            {
+                "name": "budget_detail_code",
+                "type": "varchar",
+                "comment": "预算明细code"
+            },
+            {
+                "name": "budget_trade_code",
+                "type": "varchar",
+                "comment": "预算交易code"
+            },
+            {
+                "name": "source_budget_occupied_amount",
+                "type": "decimal",
+                "comment": "订单占用来源预算"
+            },
+            {
+                "name": "budget_type",
+                "type": "tinyint",
+                "comment": "预算类型 0：部门，1：项目，2：个人"
+            },
+            {
+                "name": "user_id",
+                "type": "bigint",
+                "comment": "使用人ID"
+            },
+            {
+                "name": "user_org_id",
+                "type": "bigint",
+                "comment": "使用人部门id"
+            },
+            {
+                "name": "user_org_code",
+                "type": "varchar",
+                "comment": "使用人部门编号"
+            },
+            {
+                "name": "expected_arrive_time",
+                "type": "datetime",
+                "comment": "期望交货时间"
+            },
+            {
+                "name": "beneficiary_code",
+                "type": "varchar",
+                "comment": "受益对象编码"
+            },
+            {
+                "name": "expense_type_code",
+                "type": "varchar",
+                "comment": "费用类型code"
+            },
+            {
+                "name": "budget_type_code",
+                "type": "varchar",
+                "comment": "预算类型编号"
+            },
+            {
+                "name": "business_unit_id",
+                "type": "bigint",
+                "comment": "业务单元id"
+            },
+            {
+                "name": "reference_price",
+                "type": "decimal",
+                "comment": "参考价格"
+            },
+            {
+                "name": "reference_price_tax_code",
+                "type": "varchar",
+                "comment": "参考价税率编码"
+            },
+            {
+                "name": "reference_price_tax_rate",
+                "type": "decimal",
+                "comment": "参考价税率"
+            },
+            {
+                "name": "stock_organization_code",
+                "type": "varchar",
+                "comment": "库存组织编码"
+            },
+            {
+                "name": "stock_site_code",
+                "type": "varchar",
+                "comment": "库存地点编码"
+            },
+            {
+                "name": "invoice_receiver_id",
+                "type": "bigint",
+                "comment": "收票人id"
+            },
+            {
+                "name": "invoice_receiver_purchase_group_code",
+                "type": "varchar",
+                "comment": "收票人采购组编码"
+            },
+            {
+                "name": "invoice_address_id",
+                "type": "bigint",
+                "comment": "收票地址id"
+            },
+            {
+                "name": "receiver_org_code",
+                "type": "varchar",
+                "comment": "收货人组织编码"
+            },
+            {
+                "name": "rule",
+                "type": "varchar",
+                "comment": "订单行规则配置"
+            },
+            {
+                "name": "apply_cap_code",
+                "type": "varchar",
+                "comment": "申请帽交易code"
+            },
+            {
+                "name": "accounting_subject_id",
+                "type": "bigint",
+                "comment": "核算科目ID"
+            },
+            {
+                "name": "freight_rule_id",
+                "type": "bigint",
+                "comment": "运费规则ID"
+            },
+            {
+                "name": "contract_id",
+                "type": "bigint",
+                "comment": "合同ID"
+            },
+            {
+                "name": "fixed_order_code",
+                "type": "varchar",
+                "comment": "定价单号"
+            },
+            {
+                "name": "fixed_order_item_code",
+                "type": "varchar",
+                "comment": "定价单行号"
+            },
+            {
+                "name": "project_id",
+                "type": "bigint",
+                "comment": "项目ID"
+            },
+            {
+                "name": "fixed_order_item_amount",
+                "type": "decimal",
+                "comment": "定价行金额"
+            },
+            {
+                "name": "fixed_order_item_min_quantity",
+                "type": "decimal",
+                "comment": "寻源最小起订量"
+            },
+            {
+                "name": "multi_recv_type",
+                "type": "tinyint",
+                "comment": "多步收货类型(1:一步收货 2:两步收货)"
+            },
+            {
+                "name": "purchase_desc",
+                "type": "varchar",
+                "comment": "采购说明"
+            },
+            {
+                "name": "contract_cap_amount",
+                "type": "decimal",
+                "comment": "合同帽金额"
+            },
+            {
+                "name": "contract_cap_number",
+                "type": "decimal",
+                "comment": "合同帽数量"
+            },
+            {
+                "name": "contract_cap_contract_code",
+                "type": "varchar",
+                "comment": "合同帽合同code"
+            },
+            {
+                "name": "apply_purchaser_company_id",
+                "type": "bigint",
+                "comment": "申请主体"
+            },
+            {
+                "name": "buyer_invoice_receiver_id",
+                "type": "bigint",
+                "comment": "需求收票人"
+            },
+            {
+                "name": "buyer_invoice_address_id",
+                "type": "bigint",
+                "comment": "需求收票地址"
+            },
+            {
+                "name": "source_scene",
+                "type": "smallint",
+                "comment": ""
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_order",
+                "condition": "id",
+                "cardinality": "1 : n"
+            },
+            {
+                "target": "ods_fulfillment_db_shipments_item",
+                "condition": "order_item_id",
+                "cardinality": "1 : n"
+            },
+            {
+                "target": "ods_fulfillment_db_order_item_info",
+                "condition": "order_item_id",
+                "cardinality": "1 : 1"
+            },
+            {
+                "target": "ods_fulfillment_db_order_item_detail",
+                "condition": "order_item_id",
+                "cardinality": "1 : 1"
+            }
+        ]
+    }
+}

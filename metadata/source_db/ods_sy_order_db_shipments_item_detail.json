@@ -1,0 +1,208 @@
+{
+    "ods_sy_order_db_shipments_item_detail": {
+        "layer": "ODS",
+        "source_db": "sy_order_db",
+        "source_table": "shipments_item_detail",
+        "logic_summary": "发货行明细表",
+        "description": "发货行明细表",
+        "group": "发货业务单元-ship",
+        "columns": [
+            {
+                "name": "id",
+                "type": "BIGINT",
+                "comment": "主键",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "shipments_item_id",
+                "type": "BIGINT",
+                "comment": "发货行id",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchaser_id",
+                "type": "BIGINT",
+                "comment": "租户id",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_id",
+                "type": "BIGINT",
+                "comment": "供应商id",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "name",
+                "type": "VARCHAR",
+                "comment": "标的名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "unit_code",
+                "type": "VARCHAR",
+                "comment": "单位编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "unit_name",
+                "type": "VARCHAR",
+                "comment": "单位名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "number",
+                "type": "DECIMAL",
+                "comment": "发货数量",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "count",
+                "type": "DECIMAL",
+                "comment": "发货量",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_included_price",
+                "type": "DECIMAL",
+                "comment": "含税单价",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "protocol_price",
+                "type": "DECIMAL",
+                "comment": "协议价",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_rate",
+                "type": "DECIMAL",
+                "comment": "税率",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_code",
+                "type": "VARCHAR",
+                "comment": "税码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_included_amount",
+                "type": "DECIMAL",
+                "comment": "含税总额",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_excluded_amount",
+                "type": "DECIMAL",
+                "comment": "未税总额",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "remark",
+                "type": "VARCHAR",
+                "comment": "备注",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "is_deleted",
+                "type": "TINYINT",
+                "comment": "删除标识",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "create_time",
+                "type": "DATETIME",
+                "comment": "创建时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "code",
+                "type": "VARCHAR",
+                "comment": "标的编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchase_category_id",
+                "type": "BIGINT",
+                "comment": "采购品类id",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "material_category_code",
+                "type": "VARCHAR",
+                "comment": "物料分类编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "material_category_name",
+                "type": "VARCHAR",
+                "comment": "物料分类名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "brand",
+                "type": "VARCHAR",
+                "comment": "品牌",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "spec",
+                "type": "VARCHAR",
+                "comment": "规格",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "source_scene",
+                "type": "TINYINT",
+                "comment": "来源场景",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "group_name",
+                "type": "VARCHAR",
+                "comment": "明细组",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "order_item_detail_id",
+                "type": "BIGINT",
+                "comment": "订单行明细id",
+                "nullable": false,
+                "primary_key": false
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_shipments_item",
+                "on": "ods_fulfillment_db_shipments_item_detail.shipments_item_id = ods_fulfillment_db_shipments_item.id",
+                "cardinality": "1:1"
+            }
+        ]
+    }
+}

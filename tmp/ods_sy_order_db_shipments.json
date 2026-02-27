@@ -1,0 +1,200 @@
+{
+    "ods_sy_order_db_shipments": {
+        "group": "发货单 ",
+        "source": {
+            "type": "mysql",
+            "db": "sy_order_db",
+            "table": "shipments",
+            "comment": "发货单"
+        },
+        "columns": [
+            {
+                "name": "id",
+                "type": "bigint",
+                "comment": "主键"
+            },
+            {
+                "name": "code",
+                "type": "varchar",
+                "comment": "发货单编号"
+            },
+            {
+                "name": "sup_code",
+                "type": "varchar",
+                "comment": "供应商发货单编号"
+            },
+            {
+                "name": "sup_sub_code",
+                "type": "varchar",
+                "comment": "供应商发货单子单编号"
+            },
+            {
+                "name": "pur_code",
+                "type": "varchar",
+                "comment": "采购商发货单编号"
+            },
+            {
+                "name": "count_type",
+                "type": "smallint",
+                "comment": "数量类型{0:个数,1:金额}"
+            },
+            {
+                "name": "freight_price",
+                "type": "decimal",
+                "comment": "运费"
+            },
+            {
+                "name": "amount",
+                "type": "decimal",
+                "comment": "总金额"
+            },
+            {
+                "name": "currency",
+                "type": "varchar",
+                "comment": "原币币种"
+            },
+            {
+                "name": "purchaser_id",
+                "type": "bigint",
+                "comment": "采购商ID"
+            },
+            {
+                "name": "supplier_id",
+                "type": "bigint",
+                "comment": "供应商ID"
+            },
+            {
+                "name": "supplier_cooperate_type",
+                "type": "smallint",
+                "comment": "供应商协调类型"
+            },
+            {
+                "name": "purchaser_company_id",
+                "type": "bigint",
+                "comment": "采购商公司ID"
+            },
+            {
+                "name": "receive_info_id",
+                "type": "bigint",
+                "comment": "收货人信息id"
+            },
+            {
+                "name": "express_name",
+                "type": "varchar",
+                "comment": "快递名称"
+            },
+            {
+                "name": "express_nos",
+                "type": "varchar",
+                "comment": "快递单号，多个以逗号分隔（英文逗号）"
+            },
+            {
+                "name": "send_time",
+                "type": "datetime",
+                "comment": "发送时间"
+            },
+            {
+                "name": "estimated_arrive_time",
+                "type": "datetime",
+                "comment": "预计到货时间"
+            },
+            {
+                "name": "arrive_time",
+                "type": "datetime",
+                "comment": "到货时间（妥投时间）"
+            },
+            {
+                "name": "status",
+                "type": "varchar",
+                "comment": "状态{NEW:新建,REJECT:拒收}"
+            },
+            {
+                "name": "receive_status",
+                "type": "smallint",
+                "comment": "收货状态{0:待收货,1:已收货,2:已拒收}"
+            },
+            {
+                "name": "return_status",
+                "type": "smallint",
+                "comment": "退货状态{0:待退货,1:部分退货,2:全部退货,3:退货中}"
+            },
+            {
+                "name": "remark",
+                "type": "varchar",
+                "comment": "备注"
+            },
+            {
+                "name": "accessory",
+                "type": "varchar",
+                "comment": "附件"
+            },
+            {
+                "name": "logistics_info",
+                "type": "varchar",
+                "comment": "物流信息"
+            },
+            {
+                "name": "creator",
+                "type": "bigint",
+                "comment": "创建人"
+            },
+            {
+                "name": "create_time",
+                "type": "datetime",
+                "comment": "创建时间"
+            },
+            {
+                "name": "modifier",
+                "type": "bigint",
+                "comment": "修改人"
+            },
+            {
+                "name": "modify_time",
+                "type": "datetime",
+                "comment": "修改时间"
+            },
+            {
+                "name": "is_deleted",
+                "type": "tinyint",
+                "comment": "逻辑删除标识"
+            },
+            {
+                "name": "receive_user_id",
+                "type": "bigint",
+                "comment": "收货人ID"
+            },
+            {
+                "name": "receiver_org_code",
+                "type": "varchar",
+                "comment": "收货人组织编码"
+            },
+            {
+                "name": "send_order_type",
+                "type": "varchar",
+                "comment": "发货单类型(SEND:发货单SERVICE:交付单)"
+            },
+            {
+                "name": "stop_auto_receive",
+                "type": "tinyint",
+                "comment": "停止自动收货0:不停止 1:停止"
+            },
+            {
+                "name": "send_address",
+                "type": "varchar",
+                "comment": "发货地址"
+            },
+            {
+                "name": "source_scene",
+                "type": "tinyint",
+                "comment": "来源场景"
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_shipments_item",
+                "condition": "shipments_id",
+                "cardinality": "1 : n"
+            }
+        ]
+    }
+}

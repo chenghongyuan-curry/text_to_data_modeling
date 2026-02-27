@@ -1,0 +1,288 @@
+{
+    "ods_sy_order_db_shipments_item": {
+        "layer": "ODS",
+        "source_db": "sy_order_db",
+        "source_table": "shipments_item",
+        "logic_summary": "发货单明细",
+        "description": "发货单明细",
+        "group": "发货业务单元-ship",
+        "columns": [
+            {
+                "name": "id",
+                "type": "BIGINT",
+                "comment": "主键",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "pur_code",
+                "type": "VARCHAR",
+                "comment": "采购商行编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "sup_code",
+                "type": "VARCHAR",
+                "comment": "供应商行编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "shipments_id",
+                "type": "BIGINT",
+                "comment": "发货单ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchaser_id",
+                "type": "BIGINT",
+                "comment": "采购商ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_id",
+                "type": "BIGINT",
+                "comment": "供应商ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "order_id",
+                "type": "BIGINT",
+                "comment": "订单ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "order_item_id",
+                "type": "BIGINT",
+                "comment": "订单行ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "count_type",
+                "type": "SMALLINT",
+                "comment": "数量类型{0:个数,1:金额}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_included_amount",
+                "type": "DECIMAL",
+                "comment": "含税金额",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_excluded_amount",
+                "type": "DECIMAL",
+                "comment": "不含税金额",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "send_count",
+                "type": "DECIMAL",
+                "comment": "发货数量",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "add_quantity",
+                "type": "DECIMAL",
+                "comment": "加放量",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "warranty_period",
+                "type": "SMALLINT",
+                "comment": "质保期（月）",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "status",
+                "type": "VARCHAR",
+                "comment": "状态{NEW:新建,REJECT:拒收}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receive_status",
+                "type": "SMALLINT",
+                "comment": "收货状态{0:未收货,1:部分收货,2:全部收货}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "return_status",
+                "type": "SMALLINT",
+                "comment": "退货状态{0:未退货,1:部分退货,2:全部退货,3:退货中}",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "next_send_time",
+                "type": "DATETIME",
+                "comment": "下次发货时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "name",
+                "type": "VARCHAR",
+                "comment": "发货行名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "unit_code",
+                "type": "VARCHAR",
+                "comment": "单位编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "unit_name",
+                "type": "VARCHAR",
+                "comment": "单位名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_included_price",
+                "type": "DECIMAL",
+                "comment": "含税单价",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_excluded_price",
+                "type": "DECIMAL",
+                "comment": "未税单价",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_rate",
+                "type": "VARCHAR",
+                "comment": "税率",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "tax_code",
+                "type": "VARCHAR",
+                "comment": "税码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "remark",
+                "type": "VARCHAR",
+                "comment": "备注",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "number",
+                "type": "DECIMAL",
+                "comment": "数量",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "creator",
+                "type": "BIGINT",
+                "comment": "创建人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "create_time",
+                "type": "DATETIME",
+                "comment": "创建时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modifier",
+                "type": "BIGINT",
+                "comment": "修改人",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modify_time",
+                "type": "DATETIME",
+                "comment": "修改时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "is_deleted",
+                "type": "TINYINT",
+                "comment": "逻辑删除标识",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "buyer_id",
+                "type": "BIGINT",
+                "comment": "购买人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "item_code",
+                "type": "VARCHAR",
+                "comment": "(已废弃)",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "settlement_status",
+                "type": "TINYINT",
+                "comment": "入账状态 0 未进入1部分进入 2 全部入账",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "version",
+                "type": "INT",
+                "comment": "版本号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_id",
+                "type": "BIGINT",
+                "comment": "收票人ID",
+                "nullable": false,
+                "primary_key": false
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_shipments_item_detail",
+                "on": "ods_fulfillment_db_shipments_item.id = ods_fulfillment_db_shipments_item_detail.shipments_item_id",
+                "cardinality": "1:1"
+            },
+            {
+                "target": "ods_fulfillment_db_shipments",
+                "on": "ods_fulfillment_db_shipments_item.shipments_id = ods_fulfillment_db_shipments.id",
+                "cardinality": "n:1"
+            },
+            {
+                "target": "ods_fulfillment_db_order_item",
+                "on": "ods_fulfillment_db_shipments_item.order_item_id = ods_fulfillment_db_order_item.id",
+                "cardinality": "n:1"
+            }
+        ]
+    }
+}

@@ -1,0 +1,320 @@
+{
+    "ods_sy_order_db_order_info": {
+        "layer": "ODS",
+        "source_db": "sy_order_db",
+        "source_table": "order_info",
+        "logic_summary": "订单信息",
+        "description": "订单信息",
+        "group": "订单业务单元-po",
+        "columns": [
+            {
+                "name": "id",
+                "type": "BIGINT",
+                "comment": "主键",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchaser_id",
+                "type": "BIGINT",
+                "comment": "采购商ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "order_id",
+                "type": "BIGINT",
+                "comment": "订单ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_code",
+                "type": "VARCHAR",
+                "comment": "供应商编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_name",
+                "type": "VARCHAR",
+                "comment": "供应商名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_cooperate_type",
+                "type": "SMALLINT",
+                "comment": "供应商协调类型",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_main_user_code",
+                "type": "VARCHAR",
+                "comment": "供应商主联系人编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_main_user_name",
+                "type": "VARCHAR",
+                "comment": "供应商主联系人姓名",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "supplier_main_user_mobile",
+                "type": "VARCHAR",
+                "comment": "供应商主联系人电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "business_unit_pur_code",
+                "type": "VARCHAR",
+                "comment": "业务单元外部编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "business_unit_name",
+                "type": "VARCHAR",
+                "comment": "业务单元名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "settle_company_code",
+                "type": "VARCHAR",
+                "comment": "结算主体编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "settle_company_name",
+                "type": "VARCHAR",
+                "comment": "结算主体名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "creator",
+                "type": "BIGINT",
+                "comment": "创建人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "create_time",
+                "type": "DATETIME",
+                "comment": "创建时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modifier",
+                "type": "BIGINT",
+                "comment": "修改人ID",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "modify_time",
+                "type": "DATETIME",
+                "comment": "修改时间",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "is_deleted",
+                "type": "TINYINT",
+                "comment": "逻辑删除标识",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "purchase_organization_name",
+                "type": "VARCHAR",
+                "comment": "采购组织名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_code",
+                "type": "VARCHAR",
+                "comment": "采购员编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_name",
+                "type": "VARCHAR",
+                "comment": "采购员名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_org_name",
+                "type": "VARCHAR",
+                "comment": "采购组织(采购员所在的组织)",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_company_org_code",
+                "type": "VARCHAR",
+                "comment": "采购员的公司级部门(采购单位)编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_company_org_name",
+                "type": "VARCHAR",
+                "comment": "采购员的公司级部门(采购单位)名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_group_name",
+                "type": "VARCHAR",
+                "comment": "采购员所在组名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_mobile",
+                "type": "VARCHAR",
+                "comment": "采购员电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_email",
+                "type": "VARCHAR",
+                "comment": "采购员邮箱",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "agent_org_code",
+                "type": "VARCHAR",
+                "comment": "采购员的部门编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receiver_code",
+                "type": "VARCHAR",
+                "comment": "收货人编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receiver_name",
+                "type": "VARCHAR",
+                "comment": "收货人名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "receiver_mobile",
+                "type": "VARCHAR",
+                "comment": "收货人电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_code",
+                "type": "VARCHAR",
+                "comment": "收票人编号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_name",
+                "type": "VARCHAR",
+                "comment": "收票人名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_receiver_mobile",
+                "type": "VARCHAR",
+                "comment": "收票人电话",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_title_taxpayer_code",
+                "type": "VARCHAR",
+                "comment": "税务发票号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_title_company_name",
+                "type": "VARCHAR",
+                "comment": "发票抬头公司名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_title_bank_name",
+                "type": "VARCHAR",
+                "comment": "银行名称",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_title_bank_account",
+                "type": "VARCHAR",
+                "comment": "银行账号",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_title_address",
+                "type": "VARCHAR",
+                "comment": "发票抬头地址",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "invoice_title_mobile",
+                "type": "VARCHAR",
+                "comment": "发票抬头地址",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "base_exchange_rate_date",
+                "type": "DATETIME",
+                "comment": "汇率日期",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "base_exchange_rate_type_code",
+                "type": "VARCHAR",
+                "comment": "汇率类型编码",
+                "nullable": false,
+                "primary_key": false
+            },
+            {
+                "name": "base_exchange_rate_type_name",
+                "type": "VARCHAR",
+                "comment": "汇率类型名称",
+                "nullable": false,
+                "primary_key": false
+            }
+        ],
+        "relations": [
+            {
+                "target": "ods_fulfillment_db_order",
+                "on": "ods_fulfillment_db_order_info.order_id = ods_fulfillment_db_order.id",
+                "cardinality": "1:1"
+            }
+        ]
+    }
+}
