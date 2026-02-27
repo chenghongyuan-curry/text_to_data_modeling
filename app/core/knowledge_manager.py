@@ -112,17 +112,15 @@ class KnowledgeManager:
                             f"Data Layer: {layer}"
                         ]
                         
-                        # 关键语义：字段名 + 字段注释
+                        # 关键语义：将字段名 + 字段注释转为类 Markdown 结构以强化检索
                         if "columns" in meta:
-                            col_info = []
+                            col_info = ["| Field | Type | Comment |", "|---|---|---|"]
                             for c in meta["columns"]:
                                 col_name = c.get("name", "")
+                                col_type = c.get("type", "String")
                                 col_comment = c.get("comment", "")
-                                if col_comment:
-                                    col_info.append(f"{col_name}({col_comment})")
-                                else:
-                                    col_info.append(col_name)
-                            desc_segments.append(f"Fields Detail: {', '.join(col_info)}")
+                                col_info.append(f"| {col_name} | {col_type} | {col_comment} |")
+                            desc_segments.append("Fields Detail:\n" + "\n".join(col_info))
                         
                         # 关联语义：血缘关系
                         if "base_table" in meta:

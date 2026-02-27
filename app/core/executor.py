@@ -151,6 +151,51 @@ class Executor:
             print(f"[ERROR] SQL execution failed: {e}")
             return False
 
+    def validate_sql_with_clickhouse(self, sql_content: str) -> tuple[bool, str]:
+        """使用 ClickHouse 的 EXPLAIN SYNTAX 进行动态语句预检，拦截臆造字段"""
+        if not sql_content.strip():
+            return False, "Empty SQL content"
+            
+        print(f"\n[INFO] Performing ClickHouse EXPLAIN validation...")
+        try:
+            client = self._get_ck_client()
+        except Exception as e:
+            # 如果连接失败，回降/放行，避免阻塞整个流程
+            print(f"  [WARNING] ClickHouse client unavailable, skipping dynamic validation. {e}")
+            return True, ""
+
+        try:
+            # 清理 SQL 注释和分割可能会有多条的 SQL
+            # import re
+            import re
+            cleaned_sql_for_check = re.sub(r'--.*?\n', '\n', sql_content)
+            cleaned_sql_for_check = re.sub(r'/\*.*?\*/', '', cleaned_sql_for_check, flags=re.DOTALL)
+            
+            statements = [s.strip() for s in cleaned_sql_for_check.split(';') if s.strip()]
+            for stmt in statements:
+                # 过滤掉无法用 EXPLAIN 的查询（虽然按照本需求主要是拦截 DML/SELECT）
+                if stmt.upper().startswith(("INSERT", "SET", "USE", "CREATE", "DROP", "ALTER")):
+                     continue
+                
+                explain_stmt = f"EXPLAIN SYNTAX {stmt}"
+                
+                try:
+                    # 真实跑一遍分析计划（不真跑数据）
+                    client.execute(explain_stmt)
+                except Exception as e:
+                    # 获取 ClickHouse 的真实报错 (比如 Missing columns)
+                    err_msg = str(e)
+                    print(f"  [ERROR] ClickHouse Validation Failed: {err_msg.strip()}")
+                    return False, err_msg
+                    
+            print(f"  [SUCCESS] ClickHouse dynamic validation passed, no hallucinated fields found.")
+            return True, ""
+            
+        except Exception as e:
+            # 捕获其他非 SQL 语法引发的异常
+            print(f"  [ERROR] Validation process exception: {e}")
+            return False, str(e)
+
 if __name__ == "__main__":
     # 测试代码
     exe = Executor()

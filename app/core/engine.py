@@ -7,6 +7,7 @@ from typing import List, Optional, Type, Any, Dict
 from pydantic import BaseModel
 from openai import OpenAI
 import google.generativeai as genai
+from .executor import Executor
 
 # 步骤 1: 导入“好味道”代码样本库
 try:
@@ -63,6 +64,9 @@ class AutoDWEngine:
             self.model = "gemini-2.5-flash"
         else:
             raise ValueError(f"[ERROR] Unsupported AI_PROVIDER: {self.provider}.")
+            
+        # 初始化 Executor 用于真实的 ClickHouse 动态预检
+        self.executor = Executor()
 
     def _call_ai(self, system_instruction: str, prompt: str, response_schema: Optional[Type[BaseModel]] = None, is_json: bool = False):
         if self.provider == "aliyun":
@@ -129,17 +133,56 @@ class AutoDWEngine:
         except Exception as e:
             return False, str(e)
 
-    def _call_ai_with_retry(self, system_instruction, prompt, dialect=None, max_retries=3):
+    def _call_ai_with_retry(self, system_instruction, prompt, dialect=None, max_retries=3, dynamic_check=True):
         current_prompt = prompt
         for attempt in range(max_retries):
             raw_response = self._call_ai(system_instruction, current_prompt, is_json=False)
             cleaned_sql = self._clean_sql_code(raw_response)
-            is_valid, error_msg = self._validate_sql(cleaned_sql, dialect=dialect)
-            if is_valid:
+            
+            # 第一重校验：静态语法校验（sqlglot）
+            is_valid_static, static_error_msg = self._validate_sql(cleaned_sql, dialect=dialect)
+            
+            error_msg = None
+            if not is_valid_static:
+                error_msg = f"Static Syntax Error: {static_error_msg}"
+            elif dynamic_check:
+                # 第二重校验：动态真机校验（ClickHouse EXPLAIN SYNTAX），拦截臆造字段
+                is_valid_dynamic, dynamic_error_msg = self.executor.validate_sql_with_clickhouse(cleaned_sql)
+                if not is_valid_dynamic:
+                    error_msg = f"ClickHouse Execution Error: {dynamic_error_msg}"
+            
+            if not error_msg:
                 return cleaned_sql
-            print(f"[WARNING] [Attempt {attempt+1}/{max_retries}] SQL syntax validation failed: {error_msg}")
-            current_prompt = f"{prompt}\n\n---\nPrevious attempt failed. Error: {error_msg}\nCorrect the SQL:\n{cleaned_sql}"
+                
+            print(f"[WARNING] [Attempt {attempt+1}/{max_retries}] Validation failed: {error_msg}")
+            current_prompt = f"{prompt}\n\n---\nPrevious SQL attempt failed. \n**Error details:**\n{error_msg}\n\n**Please self-reflect and correct the SQL, especially check if you hallucinated any fields that are NOT in the exact source metadata!!!**\nIncorrect SQL:\n```sql\n{cleaned_sql}\n```"
+            
         raise RuntimeError(f"[ERROR] SQL generation failed after {max_retries} attempts.")
+
+    def _meta_to_markdown_ddl(self, meta_dict: Dict[str, Any]) -> str:
+        """从源头上减少 LLM 对复杂 JSON 结构的注意力分散问题，把传入的表元数据由 JSON 转化为 Markdown 格式"""
+        if not meta_dict:
+            return "No metadata provided."
+            
+        md_lines = []
+        for table_name, meta in meta_dict.items():
+            layer = meta.get("layer", "UNKNOWN")
+            logic = meta.get("logic_summary", "N/A")
+            md_lines.append(f"### 表名: `{table_name}` (所在层级: {layer})")
+            md_lines.append(f"**业务逻辑**: {logic}")
+            
+            columns = meta.get("columns", [])
+            if columns:
+                md_lines.append("| 字段名 | 数据类型 | 业务注释 |")
+                md_lines.append("|---|---|---|")
+                for col in columns:
+                    cname = col.get("name", "")
+                    ctype = col.get("type", "String")
+                    ccomment = col.get("comment", "")
+                    md_lines.append(f"| {cname} | {ctype} | {ccomment} |")
+            md_lines.append("\n")
+            
+        return "\n".join(md_lines)
 
     def embed_text(self, text: str) -> List[float]:
         try:
@@ -269,39 +312,47 @@ class AutoDWEngine:
         {DATAX_TEMPLATE}
         ```
         生成规则：
-        1. 动态替换模板中的表名和字段名。
-        2. 连接信息请使用占位符填写。
+        1. 必须根据提供的表结构替换 `source_columns`, `source_table`, `target_columns`, `target_table` 这四个占位符（将其替换为真实的 JSON 数组或字符串）。
+        2. 全局强制规则：除上述四个占位符外，所有的 `${{...}}` 参数（如 `${{reader_name}}`, `${{reader_database_username}}` 等）必须**原封不动**保留在生成的 JSON 中！绝对不要尝试把它们替换为任何具体的值。它们将在调度系统中被动态提取解析。
         3. 请仅输出纯净的 JSON 代码，不要包含额外的解释。
-        4. 全局强制规则：仅允许执行最基础的映射与数据脱敏。严禁在 ODS 层包含任何 Join（连接）、Filter（过滤）或具有业务逻辑的计算。
+        4. 尽量保证 JSON 的 key 顺序和缩进正确，不包含任何特殊字符截断。
         """
         response = self._call_ai(system, f"Metadata for DataX: {json.dumps(meta)}")
         return self._clean_json_code(response)
 
-    def generate_ods_ddl(self, meta):
+    def generate_ods_ddl(self, meta, database_name):
         system = f"""
         你是一个数据库架构专家。请严格参考 'Good Smell' 规范模板，为提供的 ODS 元数据生成 ClickHouse 建表 DDL 语句。
 
         参考模板：
         ```sql
-        {{CLICKHOUSE_DDL_TEMPLATE}}
+        {CLICKHOUSE_DDL_TEMPLATE}
         ```
 
         模板动态参数说明：
-        - `[database]`：数据库名称（例如：ods）。
+        - `[database]`：强制替换为 `{database_name}`。
         - `[table_name]`：数据表名称。
         - `[cluster_name]`：ClickHouse 集群名称（如果没有特别指定，统一使用 'sunyur_cluster'）。
         - `[columns]`：字段定义与数据类型映射。
-        - `[partition_key]`：分区键（对于 ODS 一般可忽略）。
+        - `[partition_key]`：分区键（对于 ODS 一般可忽略，如果没有写空）。
         - `[order_key]`：排序键, 一般为来源表的PRIMARY KEY。
-        - `[properties]`：其他表属性设置（如：TTL _pt + toIntervalDay(2), SETTINGS index_granularity = 8192）。
+        - `[properties]`：其他表属性设置（不要随意添加 TTL，除非有特殊要求。如需性能可以添加：SETTINGS index_granularity = 8192）。
         - `[comment]`：表级别的业务含义中文注释。
+        - `[timestamp]`：ReplicatedMergeTree 的 zookeeper 路径时间戳，必须精确到秒（例如：yyyyMMddHHmmss 或 Epoch 秒数），确保每次生成的路径绝对唯一。
+
+        数据类型映射强约束（MySQL 到 ClickHouse）：
+        - `INT` 类型 -> `Int32`
+        - `BIGINT`, `TINYINT`, `SMALLINT` 等 -> `Int64`
+        - `DECIMAL`, `FLOAT`, `DOUBLE` 等 -> `Decimal(30,10)`
+        - `VARCHAR`, `CHAR`, `JSON`, `TEXT`, `MEDIUMTEXT`, `LONGTEXT` 等字符串类型 -> `String`
+        - `DATETIME`, `TIMESTAMP` 类型 -> `DateTime`
 
         生成规则：
         1. 必须使用参考模板中规定的 Distributed 和 ReplicatedMergeTree 引擎分离结构。
         2. 动态替换模板中所有以 `[]` 标识的变量。
         3. 请仅输出 SQL 代码，不带多余解释。
         """
-        return self._call_ai_with_retry(system, f"Metadata: {json.dumps(meta)}", dialect="clickhouse")
+        return self._call_ai_with_retry(system, f"Metadata: {json.dumps(meta)}", dialect="clickhouse", dynamic_check=False)
 
     def generate_dwd(self, dwd_meta, ods_meta, production_style, feedback: str = None, pinned_table_name: str = None, source_tables: List[str] = None):
         feedback_prompt = f"User feedback to address: {feedback}" if feedback else ""
@@ -349,28 +400,37 @@ class AutoDWEngine:
         {feedback_prompt}
         {field_whitelist_prompt}
         """
-        prompt = f"DWD Metadata: {json.dumps(dwd_meta)}\nODS Metadata: {json.dumps(ods_meta)}"
+        prompt = f"DWD Metadata:\n{self._meta_to_markdown_ddl(dwd_meta)}\n\nODS Metadata:\n{self._meta_to_markdown_ddl(ods_meta)}"
         return self._call_ai_with_retry(system, prompt, dialect="hive")
 
 
-    def generate_dwd_ddl(self, dwd_sql):
+    def generate_dwd_ddl(self, dwd_sql, database_name):
         system = f"""
         你是一个数据库架构专家。请基于提供的 SQL 查询语句，严格参考 'Good Smell' 规范模板生成对应的 DWD 层 ClickHouse 建表 DDL。
 
         参考模板：
         ```sql
-        {{CLICKHOUSE_DDL_TEMPLATE}}
+        {CLICKHOUSE_DDL_TEMPLATE}
         ```
 
         模板动态参数说明：
-        - `[database]`：数据库名称（例如：dwd）。
+        - `[database]`：强制替换为 `{database_name}`。
         - `[table_name]`：数据表名称。
         - `[cluster_name]`：ClickHouse 集群名称（如果没有特别指定，统一使用 'sunyur_cluster'）。
         - `[columns]`：这是极其重要的一环。每个表的前两个字段必须强制排布为 `_pt` (类型 Date，建议：_pt Date DEFAULT toDate(now())) 和 `pur_id` (类型 String，租户标识)。其余后面的所有字段你必须精确地从输入 SQL 语句最后返回的 SELECT 列中推导结构，且**生成的建表字段名必须全部是纯英文格式**，不得使用中文作为字段名，中文业务含义统一体现在 COMMENT 注释中！
         - `[partition_key]`：分区键必须固定为 `_pt`。
         - `[order_key]`：排序键必须固定为 `pur_id`。
-        - `[properties]`：其他表属性设置。（如：TTL _pt + toIntervalDay(2), SETTINGS index_granularity = 8192）。
+        - `[properties]`：其他表属性设置。必须包含 `TTL _pt + toIntervalDay(7)`，以及 `SETTINGS index_granularity = 8192`。
         - `[comment]`：必须保证表和它的所有字段具有 100% 的业务含义中文注释覆盖。
+        - `[timestamp]`：ReplicatedMergeTree 的 zookeeper 路径时间戳，必须精确到秒（例如：yyyyMMddHHmmss 或 Epoch 秒数），确保每次生成的路径绝对唯一。
+
+        数据类型映射强约束：
+        除业务主键外，生成字段类型必须**统一映射**为以下 5 种标准类型之一：
+        - `Int32`
+        - `Int64`
+        - `Decimal(30,10)`
+        - `String`
+        - `DateTime`
 
         生成规则：
         1. 必须使用参考模板中规定的 Distributed 和 ReplicatedMergeTree 引擎分离结构。
@@ -379,7 +439,7 @@ class AutoDWEngine:
         4. 请仅输出 SQL 代码，不带多余解释。
         """
         prompt = f"DWD Query SQL:\n{dwd_sql}"
-        return self._call_ai_with_retry(system, prompt, dialect="clickhouse")
+        return self._call_ai_with_retry(system, prompt, dialect="clickhouse", dynamic_check=False)
 
     def generate_ads(self, analysis, dwd_ddl, feedback: str = None, pinned_table_name: str = None, source_tables: List[str] = None):
         req_type = analysis.get("requirement_type", "DETAIL")
@@ -409,25 +469,35 @@ class AutoDWEngine:
         {feedback_prompt}
         """
         prompt = f"Analysis: {json.dumps(analysis)}\nDWD DDL:\n{dwd_ddl}"
+        # 这里如果 analysis 里有其他传入的字典型 meta 也可以转换
         return self._call_ai_with_retry(system, prompt, dialect="hive")
 
-    def generate_ads_ddl(self, ads_sql):
+    def generate_ads_ddl(self, ads_sql, database_name):
         system = f"""
         你是一个数据库架构专家。请基于提供的 SQL 查询语句，严格参考 'Good Smell' 规范模板生成对应的 ADS/DWS 应用层 ClickHouse 建表 DDL。
         参考模板：
         ```sql
-        {{CLICKHOUSE_DDL_TEMPLATE}}
+        {CLICKHOUSE_DDL_TEMPLATE}
         ```
 
         模板动态参数说明：
-        - `[database]`：数据库名称（例如：dws 或 ads）。
+        - `[database]`：强制替换为 `{database_name}`。
         - `[table_name]`：数据表名称。
         - `[cluster_name]`：ClickHouse 集群名称（如果没有特别指定，统一使用 'sunyur_cluster'）。
         - `[columns]`：这是极其重要的一环。每个表的前两个字段必须强制排布为 `_pt` (类型 Date，建议：_pt Date DEFAULT toDate(now())) 和 `pur_id` (类型 String，租户标识)。其余后面的所有字段你必须精确地从输入 SQL 语句最后返回的 SELECT 列中推导结构，且**生成的建表字段名必须全部是纯英文格式**，不得使用中文作为字段名，中文业务含义统一体现在 COMMENT 注释中！
         - `[partition_key]`：分区键必须固定为 `_pt`。
         - `[order_key]`：排序键必须固定为 `pur_id`。
-        - `[properties]`：其他表属性设置。（如：TTL _pt + toIntervalDay(2), SETTINGS index_granularity = 8192）。
+        - `[properties]`：其他表属性设置。必须包含 `TTL _pt + toIntervalDay(7)`，以及 `SETTINGS index_granularity = 8192`。
         - `[comment]`：表级别和所有字段级别必须拥有 100% 的中文注释。
+        - `[timestamp]`：ReplicatedMergeTree 的 zookeeper 路径时间戳，必须精确到秒（例如：yyyyMMddHHmmss 或 Epoch 秒数），确保每次生成的路径绝对唯一。
+
+        数据类型映射强约束：
+        除业务主键外，生成字段类型必须**统一映射**为以下 5 种标准类型之一：
+        - `Int32`
+        - `Int64`
+        - `Decimal(30,10)`
+        - `String`
+        - `DateTime`
 
         生成规则：
         1. 必须使用参考模板中规定的 Distributed 和 ReplicatedMergeTree 引擎分离结构。
@@ -435,4 +505,4 @@ class AutoDWEngine:
         3. 请把模板里的所有 `[]` 动态参数替换为有意义的真实设定。
         4. 请仅输出 SQL 代码，不带任何其他解释。
         """
-        return self._call_ai_with_retry(system, f"ADS Query SQL:\n{ads_sql}", dialect="clickhouse")
+        return self._call_ai_with_retry(system, f"ADS Query SQL:\n{ads_sql}", dialect="clickhouse", dynamic_check=False)

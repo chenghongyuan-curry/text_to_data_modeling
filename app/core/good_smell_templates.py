@@ -156,67 +156,58 @@ WHERE
 DATAX_TEMPLATE = """
 {
     "job": {
-        "setting": {
-            "speed": {
-                "channel": 5,
-                "byte": 10485760
-            },
-            "errorLimit": {
-                "record": 0,
-                "percentage": 0.02
-            }
-        },
         "content": [
             {
                 "reader": {
-                    "name": "mysqlreader",
+                    "name": "${reader_name}",
                     "parameter": {
-                        "username": "${MYSQL_USER}",
-                        "password": "${MYSQL_PASSWORD}",
+                        "username": "${reader_database_username}",
+                        "password": "${reader_database_password}",
+                        "column": [
+                            source_columns
+                        ],
+                        "splitPk": "id",
                         "connection": [
                             {
-                                "jdbcUrl": [
-                                    "jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DB}?useUnicode=true&characterEncoding=UTF-8"
-                                ],
                                 "table": [
-                                    "your_source_table"
+                                    source_table
+                                ],
+                                "jdbcUrl": [
+                                    "${reader_database_url}"
                                 ]
                             }
-                        ],
-                        "column": [
-                            "id",
-                            "name",
-                            "create_time"
-                        ],
-                        "where": "1=1"
+                        ]
                     }
                 },
                 "writer": {
-                    "name": "clickhousewriter",
+                    "name": "${writer_name}",
                     "parameter": {
-                        "username": "${CLICKHOUSE_USER}",
-                        "password": "${CLICKHOUSE_PASSWORD}",
                         "column": [
-                            "id",
-                            "name",
-                            "create_time"
+                            target_columns
                         ],
                         "connection": [
                             {
-                                "jdbcUrl": "jdbc:clickhouse://${CLICKHOUSE_HOST}:${CLICKHOUSE_PORT}/${CLICKHOUSE_DB}",
+                                "jdbcUrl": "${writer_database_url}",
                                 "table": [
-                                    "your_target_table"
+                                    target_table
                                 ]
                             }
                         ],
+                        "username": "${writer_database_username}",
+                        "password": "${writer_database_password}",
+                        "writeMode": "insert",
                         "preSql": [
-                            "TRUNCATE TABLE your_target_table"
-                        ],
-                        "batchSize": 1024
+                            "${writer_pre_sql}"
+                        ]
                     }
                 }
             }
-        ]
+        ],
+        "setting": {
+            "speed": {
+                "channel": 1
+            }
+        }
     }
 }
 """
@@ -244,7 +235,7 @@ DROP TABLE IF EXISTS [database].[table_name]_part ON CLUSTER '[cluster_name]';
 CREATE TABLE IF NOT EXISTS [database].[table_name]_part ON CLUSTER '[cluster_name]' (
     [columns]
 )
-ENGINE = ReplicatedMergeTree('/clickhouse/[cluster_name]/[database]/tables/{shard}/[table_name]/[bizdate]', '{replica}')}
+ENGINE = ReplicatedMergeTree('/clickhouse/[cluster_name]/tables/{shard}/[database]/[table_name]-[timestamp]', '{replica}')
 PARTITION BY [partition_key]
 ORDER BY [order_key]
 [properties]

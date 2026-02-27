@@ -3,6 +3,7 @@ import json
 from typing import Dict, Any # 导入 Dict 和 Any
 from .engine import AutoDWEngine
 from .knowledge_manager import KnowledgeManager
+from .executor import Executor
 
 class AutoDWPipeline:
     def __init__(self):
@@ -10,6 +11,8 @@ class AutoDWPipeline:
         try:
             self.engine = AutoDWEngine()
             self.km = KnowledgeManager()
+            self.executor = Executor()
+            self.dw_name = os.getenv("DW_NAME", "sy_dw")
         except ValueError as e:
             print(f"[ERROR] Initialization failed: {e}")
             raise
@@ -38,22 +41,27 @@ class AutoDWPipeline:
                 # 重新检索知识库，因为需求变了
                 self._step_knowledge_retrieval(current_query)
 
-        # 3. ODS 层生成 (自动执行，通常不需要人工干预)
-        self._step_generate_ods(analysis)
+        # 3. ODS 层生成
+        ods_tables = self._step_generate_ods(analysis)
+        if ods_tables:
+            user_input = input("\n>> [EXECUTION] ODS 层代码已生成。是否立即执行 DDL 和 DataX 同步? (y: 执行 / n: 跳过): ").strip().lower()
+            if user_input == 'y':
+                self._execute_tables("ods", ods_tables)
 
         # 4. DWD 层生成与确认循环
         dwd_context = ""
+        dwd_tables = []
         dwd_feedback = None
         while True:
             # 生成 DWD (传入 analysis)
-            dwd_context = self._step_generate_dwd(analysis, feedback=dwd_feedback)
+            dwd_context, dwd_tables = self._step_generate_dwd(analysis, feedback=dwd_feedback)
             
             if not dwd_context:
                 print("[INFO] DWD 层处理完毕或无变更。")
                 break 
 
             print("\n[INTERACTION] DWD 层代码已生成。请检查 output/dwd/ 目录下的文件。")
-            user_input = input(">> 确认 DWD 逻辑? (y: 继续 / n: 提供修改意见 / q: 退出): ").strip().lower()
+            user_input = input(">> 确认 DWD 逻辑? (y: 继续并准备执行 / n: 提供修改意见 / q: 退出): ").strip().lower()
             
             if user_input == 'y':
                 break
@@ -63,16 +71,25 @@ class AutoDWPipeline:
             else:
                 dwd_feedback = input(">> 请输入 DWD 修改意见 (例如: '增加逻辑删除过滤'): ").strip()
                 print("[INFO] 正在根据反馈重新生成 DWD...")
+                
+        if dwd_tables:
+            user_input = input("\n>> [EXECUTION] 是否立即在 ClickHouse 中执行 DWD 的 DDL 和 SQL? (y: 执行 / n: 跳过): ").strip().lower()
+            if user_input == 'y':
+                self._execute_tables("dwd", dwd_tables)
 
         # 5. 服务层 (DWS/ADS) 生成与确认循环
         service_feedback = None
+        service_tables = []
+        target_layer = "DWS" if analysis.get("requirement_type") == "DETAIL" else "ADS"
+        layer_dir = target_layer.lower()
         while True:
-            self._step_generate_service_layer(analysis, dwd_context, feedback=service_feedback)
+            service_tables = self._step_generate_service_layer(analysis, dwd_context, feedback=service_feedback)
             
-            target_layer = "DWS" if analysis.get("requirement_type") == "DETAIL" else "ADS"
-            layer_dir = target_layer.lower()
+            if not service_tables:
+                break
+                
             print(f"\n[INTERACTION] 服务层 ({target_layer}) 代码已生成。请检查 output/{layer_dir}/ 目录下的文件。")
-            user_input = input(">> 确认最终报表逻辑? (y: 完成 / n: 提供修改意见 / q: 退出): ").strip().lower()
+            user_input = input(">> 确认最终报表逻辑? (y: 完成并准备执行 / n: 提供修改意见 / q: 退出): ").strip().lower()
             
             if user_input == 'y':
                 break
@@ -82,6 +99,11 @@ class AutoDWPipeline:
             else:
                 service_feedback = input(">> 请输入修改意见 (例如: '修改聚合口径'): ").strip()
                 print("[INFO] 正在根据反馈重新生成服务层代码...")
+                
+        if service_tables:
+            user_input = input(f"\n>> [EXECUTION] 是否立即在 ClickHouse 中执行 {target_layer} 的 DDL 和 SQL? (y: 执行 / n: 跳过): ").strip().lower()
+            if user_input == 'y':
+                self._execute_tables("service", service_tables)
 
         print("\n[SUCCESS] Pipeline execution finished successfully!")
 
@@ -100,7 +122,7 @@ class AutoDWPipeline:
         self._step_generate_ods(analysis)
         
         # 4. DWD 层生成
-        dwd_context = self._step_generate_dwd(analysis)
+        dwd_context, _ = self._step_generate_dwd(analysis)
         
         # 5. DWS/ADS 服务层生成
         self._step_generate_service_layer(analysis, dwd_context)
@@ -303,7 +325,7 @@ class AutoDWPipeline:
         
         if not planned_ods_tables_raw:
             print("[INFO] No specific ODS tables found in LAYER PLAN. Skipping ODS generation.")
-            return
+            return []
 
         # 构建需要处理的 ODS 表名清单 (去除可能的状态信息)
         planned_ods_table_names = []
@@ -325,11 +347,12 @@ class AutoDWPipeline:
         
         if not planned_ods_table_names:
             print("[INFO] No valid ODS table names extracted from LAYER PLAN. Skipping ODS generation.")
-            return
+            return []
 
         print(f"[INFO] ODS tables to process from LAYER PLAN: {', '.join(planned_ods_table_names)}")
 
         processed_count = 0
+        processed_tables = []
         for table_name in planned_ods_table_names:
             print(f"  [INFO] Processing table: {table_name}...")
             # 因为是生成 ODS，我们需要其源表结构，因此从 source_meta 里查找
@@ -348,15 +371,18 @@ class AutoDWPipeline:
             single_table_meta = {table_name: meta_for_generation}
             
             ods_code = self.engine.generate_ods(single_table_meta)
-            ods_ddl = self.engine.generate_ods_ddl(single_table_meta)
+            ods_ddl = self.engine.generate_ods_ddl(single_table_meta, database_name=self.dw_name)
             
             self._save_file(f'output/ods/{table_name}.json', ods_code)
             self._save_file(f'output/ods/{table_name}.ddl', ods_ddl)
             print(f"     [SUCCESS] Generated: output/ods/{table_name}.json & .ddl")
             processed_count += 1
+            processed_tables.append(table_name)
         
         if processed_count == 0:
             print("[WARNING] No ODS tables were successfully processed based on the LAYER PLAN.")
+        return processed_tables
+
     def _step_generate_dwd(self, analysis, feedback: str = None):
         """步骤3: 基于分析计划生成 DWD 层代码 (模型驱动)"""
         print("\n[STEP 3/4] Developing DWD Layer (SQL)...")
@@ -366,10 +392,11 @@ class AutoDWPipeline:
         
         if not dwd_tables:
             print("[INFO] No DWD tables planned, skipping.")
-            return ""
+            return "", []
 
         production_style = "Hive/Clickhouse Standard, PARTITIONED BY _pt, 嵌套子查询"
         dwd_ddl_context = "" 
+        processed_tables = []
         
         for dwd_entry in dwd_tables:
             # 兼容处理: 可能是字符串 "table_name (STATUS)"，也可能是字典 {'table_name': '...'}
@@ -426,7 +453,7 @@ class AutoDWPipeline:
             
             # 使用生成的 SQL 来逆向推导 DDL，保证字段 100% 对应
             print(f"  [INFO] Generating DDL for {table_name} based on generated SQL...")
-            dwd_ddl = self.engine.generate_dwd_ddl(dwd_code)
+            dwd_ddl = self.engine.generate_dwd_ddl(dwd_code, database_name=self.dw_name)
             dwd_ddl_context += dwd_ddl + "\n"
             
             self._save_file(f'output/dwd/{table_name}.sql', dwd_code)
@@ -436,8 +463,9 @@ class AutoDWPipeline:
             updated_meta = self.engine.update_metadata_from_sql(table_name, dwd_code, "DWD")
             self._save_file(f'metadata/dwd/{table_name}.json', json.dumps(updated_meta, indent=4, ensure_ascii=False))
             print(f"     [SUCCESS] Generated: output/dwd/{table_name}.sql & Sync'd metadata/dwd/{table_name}.json")
+            processed_tables.append(table_name)
             
-        return dwd_ddl_context
+        return dwd_ddl_context, processed_tables
 
     def _step_generate_service_layer(self, analysis, dwd_context, feedback: str = None):
         """步骤4: 基于分析计划生成 DWS/ADS 层代码 (服务层)"""
@@ -449,6 +477,7 @@ class AutoDWPipeline:
         if not service_tables:
             service_tables = [analysis.get('target_table')]
 
+        processed_tables = []
         for service_entry in service_tables:
             if not service_entry: continue
             
@@ -468,7 +497,7 @@ class AutoDWPipeline:
             target_layer = layer_dir.upper()
 
             print(f"  [INFO] Generating DDL for {table_name}...")
-            ddl_code = self.engine.generate_ads_ddl(sql_code)
+            ddl_code = self.engine.generate_ads_ddl(sql_code, database_name=self.dw_name)
             
             self._save_file(f'output/{layer_dir}/{table_name}.sql', sql_code)
             self._save_file(f'output/{layer_dir}/{table_name}.ddl', ddl_code)
@@ -477,6 +506,9 @@ class AutoDWPipeline:
             updated_meta = self.engine.update_metadata_from_sql(table_name, sql_code, target_layer)
             self._save_file(f'metadata/{layer_dir}/{table_name}.json', json.dumps(updated_meta, indent=4, ensure_ascii=False))
             print(f"     [SUCCESS] Generated: output/{layer_dir}/{table_name}.sql & Sync'd metadata/{layer_dir}/{table_name}.json")
+            processed_tables.append((layer_dir, table_name))
+            
+        return processed_tables
 
     def _load_single_metadata(self, table_name, directory):
         """从目录中加载单个表的 JSON"""
@@ -506,3 +538,23 @@ class AutoDWPipeline:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'w') as f:
             f.write(content)
+
+    def _execute_tables(self, layer_name: str, tables: list):
+        if not tables:
+            return
+            
+        print(f"\n[INFO] 开始统一执行 {layer_name.upper()} 层代码 (DDL -> 任务)...")
+        # 1. 先执行所有的 DDL
+        for t in tables:
+            l_dir, t_name = t if isinstance(t, tuple) else (layer_name, t)
+            ddl_path = f'output/{l_dir}/{t_name}.ddl'
+            if os.path.exists(ddl_path):
+                self.executor.run_sql_file(ddl_path)
+                
+        # 2. 再执行所有的 DML (SQL)
+        for t in tables:
+            l_dir, t_name = t if isinstance(t, tuple) else (layer_name, t)
+            sql_path = f'output/{l_dir}/{t_name}.sql'
+            
+            if os.path.exists(sql_path):
+                self.executor.run_sql_file(sql_path)
