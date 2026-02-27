@@ -14,7 +14,7 @@ def parse_port_string(port_string):
         return db_name, table_name, field_name
     return None, None, None
 
-def transform_metadata(source_file="/Users/chenghongyuan/PycharmProjects/MyFirstPython/text_to_data_modeling/business_metadata.json", output_dir="metadata/source_db"):
+def transform_metadata(source_file="/Users/chenghongyuan/PycharmProjects/MyFirstPython/text_to_data_modeling/utils/business_metadata.json", output_dir="metadata/source_db"):
     """
     将业务导出的 ER 图 JSON 转换为项目所需的 ODS 元数据格式，并基于 port 字符串精确解析关联关系。
     """
